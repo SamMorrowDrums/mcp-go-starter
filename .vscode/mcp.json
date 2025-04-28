@@ -1,0 +1,25 @@
+{
+  "inputs": [
+    {
+      "id": "MCP_GREETING",
+      "type": "promptString",
+      "description": "Greeting to use for the hello tool and prompt"
+    },
+    {
+      "id": "MCP_SECRET",
+      "type": "promptString",
+      "description": "Secret value for demonstration purposes",
+      "password": true
+    }
+  ],
+  "servers": {
+    "mcp-go-starter": {
+      "command": "/Users/sammorrowdrums/src/github.com/sammorrowdrums/mcp-go-starter/script/go-run",
+      "args": [],
+      "env": {
+        "MCP_GREETING": "${input:MCP_GREETING}",
+        "MCP_SECRET": "${input:MCP_SECRET}"
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Go MCP Starter",
+  "image": "mcr.microsoft.com/devcontainers/go:1.22",
+  "features": {
+    "ghcr.io/devcontainers/features/go:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "go.toolsManagement.autoUpdate": true,
+        "go.useLanguageServer": true
+      }
+    }
+  },
+  "postCreateCommand": "go mod tidy"
+}
