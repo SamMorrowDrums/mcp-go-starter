@@ -61,6 +61,31 @@ func NewEnumTool() (mcp.Tool, server.ToolHandlerFunc) {
 	return tool, handler
 }
 
+// NewWeatherTool returns a tool that provides weather information for a given city
+func NewWeatherTool() (mcp.Tool, server.ToolHandlerFunc) {
+	tool := mcp.NewTool("get_weather",
+		mcp.WithDescription("Get weather information for a city"),
+		mcp.WithToolAnnotation(mcp.ToolAnnotation{
+			Title:        "Get Weather",
+			ReadOnlyHint: true,
+		}),
+		mcp.WithString("city",
+			mcp.Required(),
+			mcp.Description("Name of the city to get weather for"),
+		),
+	)
+	handler := func(ctx context.Context, request mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+		city, ok := request.Params.Arguments["city"].(string)
+		if !ok || city == "" {
+			return mcp.NewToolResultError("city must be a string and cannot be empty"), nil
+		}
+
+		// For MVP, return a simple weather report for Seattle area
+		return mcp.NewToolResultText(fmt.Sprintf("Weather report for %s: cloudy, windy and rainy", city)), nil
+	}
+	return tool, handler
+}
+
 // RegisterTools registers all tools with the server
 func RegisterTools(s *server.MCPServer) {
 	tool, handler := NewHelloTool()
@@ -68,4 +93,7 @@ func RegisterTools(s *server.MCPServer) {
 
 	colorTool, colorHandler := NewEnumTool()
 	s.AddTool(colorTool, colorHandler)
+
+	weatherTool, weatherHandler := NewWeatherTool()
+	s.AddTool(weatherTool, weatherHandler)
 }
