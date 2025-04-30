@@ -14,7 +14,7 @@
   ],
   "servers": {
     "mcp-go-starter": {
-      "command": "/Users/sammorrowdrums/src/github.com/sammorrowdrums/mcp-go-starter/script/go-run",
+      "command": "${workspaceFolder}/script/go-run",
       "args": [],
       "env": {
         "MCP_GREETING": "${input:MCP_GREETING}",
