@@ -4,21 +4,9 @@ A starter repo for building a Go MCP server using [mcp-go](https://github.com/ma
 
 ## Quick Start
 
-1. **Set the full path for your go-run script in `.vscode/mcp.json`:**
+1. **Run the server from `/vscode/mcp.json`**
 
-   Run this command in your project root to get the absolute path:
-
-   ```sh
-   pwd
-   ```
-
-   Then update the `command` field in `.vscode/mcp.json` to use the full path, for example:
-
-   ```jsonc
-   "command": "/Users/yourname/path/to/mcp-go-starter/script/go-run"
-   ```
-
-   This ensures VS Code can run the server automatically from anywhere.
+The server is configured to run out of the box, via the included mcp.json file.
 
 2. **Run the server (development mode) using the script:**
 
