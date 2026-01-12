@@ -75,7 +75,7 @@ func registerTools(server *mcp.Server) {
 		},
 		Icons: []mcp.Icon{
 			{
-				Source:      "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Waving%20hand/3D/waving_hand_3d.png",
+				Source:   WAVING_HAND_ICON,
 				MIMEType: "image/png",
 				Sizes:    []string{"256x256"},
 			},
@@ -95,7 +95,7 @@ func registerTools(server *mcp.Server) {
 		},
 		Icons: []mcp.Icon{
 			{
-				Source:      "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Sun%20behind%20cloud/3D/sun_behind_cloud_3d.png",
+				Source:   SUN_BEHIND_CLOUD_ICON,
 				MIMEType: "image/png",
 				Sizes:    []string{"256x256"},
 			},
@@ -115,7 +115,7 @@ func registerTools(server *mcp.Server) {
 		},
 		Icons: []mcp.Icon{
 			{
-				Source:      "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Robot/3D/robot_3d.png",
+				Source:   ROBOT_ICON,
 				MIMEType: "image/png",
 				Sizes:    []string{"256x256"},
 			},
@@ -135,7 +135,7 @@ func registerTools(server *mcp.Server) {
 		},
 		Icons: []mcp.Icon{
 			{
-				Source:      "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Hourglass%20not%20done/3D/hourglass_not_done_3d.png",
+				Source:   HOURGLASS_ICON,
 				MIMEType: "image/png",
 				Sizes:    []string{"256x256"},
 			},
@@ -155,7 +155,7 @@ func registerTools(server *mcp.Server) {
 		},
 		Icons: []mcp.Icon{
 			{
-				Source:      "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Package/3D/package_3d.png",
+				Source:   PACKAGE_ICON,
 				MIMEType: "image/png",
 				Sizes:    []string{"256x256"},
 			},
@@ -280,7 +280,7 @@ func loadBonusToolHandler(_ context.Context, _ *mcp.CallToolRequest, _ any) (*mc
 			},
 			Icons: []mcp.Icon{
 				{
-					Source:      "https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Abacus/3D/abacus_3d.png",
+					Source:   ABACUS_ICON,
 					MIMEType: "image/png",
 					Sizes:    []string{"256x256"},
 				},
