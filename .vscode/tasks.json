@@ -1,0 +1,44 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build (stdio)",
+      "type": "shell",
+      "command": "go build -o bin/stdio ./cmd/stdio",
+      "group": "build"
+    },
+    {
+      "label": "Build (HTTP)",
+      "type": "shell",
+      "command": "go build -o bin/http ./cmd/http",
+      "group": "build"
+    },
+    {
+      "label": "Build All",
+      "type": "shell",
+      "command": "make build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Run (stdio)",
+      "type": "shell",
+      "command": "go run ./cmd/stdio",
+      "group": "test"
+    },
+    {
+      "label": "Run (HTTP)",
+      "type": "shell",
+      "command": "go run ./cmd/http",
+      "group": "test"
+    },
+    {
+      "label": "Test",
+      "type": "shell",
+      "command": "go test ./...",
+      "group": "test"
+    }
+  ]
+}

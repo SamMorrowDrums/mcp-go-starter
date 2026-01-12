@@ -1,7 +1,0 @@
-#!/bin/bash
-
-cd "${0%/*}"
-cd ../
-echo "Running go-run in $(pwd)"
-
-go run cmd/mcp/main.go stdio

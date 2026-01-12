@@ -1,25 +1,22 @@
 {
-  "inputs": [
-    {
-      "id": "MCP_GREETING",
-      "type": "promptString",
-      "description": "Greeting to use for the hello tool and prompt"
-    },
-    {
-      "id": "MCP_SECRET",
-      "type": "promptString",
-      "description": "Secret value for demonstration purposes",
-      "password": true
-    }
-  ],
   "servers": {
+    // Development: Uses 'go run' for quick iteration
     "mcp-go-starter": {
-      "command": "${workspaceFolder}/script/go-run",
-      "args": [],
-      "env": {
-        "MCP_GREETING": "${input:MCP_GREETING}",
-        "MCP_SECRET": "${input:MCP_SECRET}"
-      }
+      "type": "stdio",
+      "command": "go",
+      "args": ["run", "./cmd/stdio"],
+      "env": {}
     }
+    // For live reload during development, run 'make dev' (requires air)
+    // Then use: "command": "./tmp/stdio"
+    
+    // Production: Build first with 'make build', then use:
+    // "command": "./bin/stdio"
+    
+    // HTTP transport: Run 'make run-http' in terminal, then:
+    // "mcp-go-starter-http": {
+    //   "type": "http",
+    //   "url": "http://localhost:3000/mcp"
+    // }
   }
 }

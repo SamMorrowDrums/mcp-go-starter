@@ -1,16 +1,23 @@
 {
-  "name": "Go MCP Starter",
-  "image": "mcr.microsoft.com/devcontainers/go:1.24",
-  "features": {
-    "ghcr.io/devcontainers/features/go:1": {}
-  },
+  "name": "MCP Go Starter",
+  "image": "mcr.microsoft.com/devcontainers/go:1-1.22",
+  "features": {},
+  "postCreateCommand": "go mod download",
   "customizations": {
     "vscode": {
+      "extensions": [
+        "golang.go"
+      ],
       "settings": {
-        "go.toolsManagement.autoUpdate": true,
         "go.useLanguageServer": true
       }
     }
   },
-  "postCreateCommand": "go mod tidy"
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": {
+      "label": "MCP HTTP Server",
+      "onAutoForward": "notify"
+    }
+  }
 }

@@ -1,216 +1,262 @@
-# mcp-go-starter
+# MCP Go Starter
 
-A starter repo for building a Go MCP server using [mcp-go](https://github.com/mark3labs/mcp-go), Cobra, and Viper.
+A feature-complete Model Context Protocol (MCP) server template in Go using the official go-sdk. This starter demonstrates all major MCP features with clean, idiomatic Go code.
 
-## Quick Start
+## 📚 Documentation
 
-1. **Run the server from `/vscode/mcp.json`**
+- [Model Context Protocol](https://modelcontextprotocol.io/)
+- [Go SDK](https://github.com/modelcontextprotocol/go-sdk)
+- [Building MCP Servers](https://modelcontextprotocol.io/docs/develop/build-server)
 
-The server is configured to run out of the box, via the included mcp.json file.
+## ✨ Features
 
-2. **Run the server (development mode) using the script:**
+| Category | Feature | Description |
+|----------|---------|-------------|
+| **Tools** | `hello` | Basic tool with annotations |
+| | `get_weather` | Tool returning structured data |
+| | `ask_llm` | Tool that invokes LLM sampling |
+| | `long_task` | Tool with 5-second progress updates |
+| | `load_bonus_tool` | Dynamically loads a new tool |
+| **Resources** | `info://about` | Static informational resource |
+| | `file://example.md` | File-based markdown resource |
+| **Templates** | `greeting://{name}` | Personalized greeting |
+| | `data://items/{id}` | Data lookup by ID |
+| **Prompts** | `greet` | Greeting in various styles |
+| | `code_review` | Code review with focus areas |
 
-```sh
-./script/go-run
-```
+## 🚀 Quick Start
 
-   This script ensures you always run the latest code from the correct directory, just like the approach in [github/github-mcp-server#51](https://github.com/github/github-mcp-server/pull/51).
+### Prerequisites
 
-3. **Or build and run the server manually:**
+- [Go 1.22+](https://go.dev/dl/)
+- (Optional) [air](https://github.com/air-verse/air) for live reload
+- (Optional) [golangci-lint](https://golangci-lint.run/welcome/install/) for linting
 
-```sh
-go build -o mcp-server ./cmd/mcp && ./mcp-server stdio
-```
-
-## Environment Variables
-
-- `MCP_GREETING`: Greeting to use for the hello tool and prompt (default: `Hello`)
-- `MCP_SECRET`: Secret value for demonstration purposes (default: `Hello`)
-
-## Features
-
-- **Hello World Tool**: Takes a `name` argument and returns a greeting.
-- **Markdown Resource**: Serves `pkg/example/resources/example.md` as an MCP resource.
-- **Prompt Example**: Simple prompt that greets the user by name.
-
-## Example: Calling the hello_world Tool
-
-You can call the `hello_world` tool from your MCP client (such as VS Code with the MCP extension) or programmatically. Here’s an example using the tool with the argument `name: "Sam"`:
-
-**Request:**
-```json
-{
-  "method": "call_tool",
-  "params": {
-    "tool": "hello_world",
-    "arguments": {
-      "name": "Sam"
-    }
-  },
-  "id": 1,
-  "jsonrpc": "2.0"
-}
-```
-
-**Response:**
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": {
-    "type": "text",
-    "text": "Hello, Sam!"
-  }
-}
-```
-
-## Example: Calling the choose_color Tool (Enum)
-
-**Request:**
-```json
-{
-  "method": "call_tool",
-  "params": {
-    "tool": "choose_color",
-    "arguments": {
-      "color": "green"
-    }
-  },
-  "id": 2,
-  "jsonrpc": "2.0"
-}
-```
-
-**Response:**
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 2,
-  "result": {
-    "type": "text",
-    "text": "You chose the color: green"
-  }
-}
-```
-
-## Example: Getting a Prompt
-
-**Request:**
-```json
-{
-  "method": "get_prompt",
-  "params": {
-    "prompt": "hello_prompt",
-    "arguments": {
-      "name": "Sam"
-    }
-  },
-  "id": 3,
-  "jsonrpc": "2.0"
-}
-```
-
-**Response:**
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 3,
-  "result": {
-    "title": "A friendly greeting",
-    "messages": [
-      {
-        "role": "assistant",
-        "content": {
-          "type": "text",
-          "text": "Hello, Sam! How can I help you today?"
-        }
-      }
-    ]
-  }
-}
-```
-
-## Example: Getting the Markdown Resource
-
-**Request:**
-```json
-{
-  "method": "read_resource",
-  "params": {
-    "resource": "docs://example"
-  },
-  "id": 4,
-  "jsonrpc": "2.0"
-}
-```
-
-**Response:**
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 4,
-  "result": [
-    {
-      "uri": "docs://example",
-      "mime_type": "text/markdown",
-      "text": "# Example Markdown Resource\n\nThis is an example markdown file served as an MCP resource.\n\n- You can edit this file to change the resource content.\n- It is embedded in the Go binary using Go's embed package.\n"
-    }
-  ]
-}
-```
-
-## Example: Prompt for an LLM Agent
-
-If you want an LLM agent (such as Copilot or another MCP-compatible assistant) to call your tools and resources, you can use a prompt like this:
-
-> You are an assistant with access to the following tools:
-> - `hello_world`: Greets a person by name using the configured greeting.
-> - `choose_color`: Lets you select a color from red, green, or blue.
-> - `docs://example`: A markdown resource with example content.
->
-> When a user asks for a greeting, call the `hello_world` tool with their name. If they ask to pick a color, call the `choose_color` tool with the color they want. If they ask for documentation or help, return the contents of the `docs://example` resource.
-
-This prompt will encourage the LLM to use your tools and resources as intended.
-
-## VS Code Integration
-
-- `.vscode/mcp.json` is preconfigured for rapid development with environment variable inputs.
-- Make sure to use the full path to the script in the `command` field for best results.
-
-## Codespaces/Devcontainer
-
-A basic devcontainer is provided for GitHub Codespaces with Go tools enabled.
-
----
-
-For more details, see the [mcp-go README](https://github.com/mark3labs/mcp-go/blob/main/README.md).
-
-## Additional Examples
-
-### Raw JSON-RPC for Accessing Prompts
-
-Note: Only some clients support prompts. Here's an example using direct JSON-RPC over stdio:
+### Installation
 
 ```bash
-echo '{"jsonrpc":"2.0","id":3,"params":{"name": "hello_prompt"},"method":"prompts/get"}' | go run cmd/mcp/main.go stdio
+# Clone the repository
+git clone https://github.com/SamMorrowDrums/mcp-go-starter.git
+cd mcp-go-starter
+
+# Download dependencies
+go mod download
 ```
 
-Output:
-```json
-{
-  "jsonrpc": "2.0",
-  "id": 3,
-  "result": {
-    "description": "A friendly greeting",
-    "messages": [
-      {
-        "role": "assistant",
-        "content": {
-          "type": "text",
-          "text": "Hello, friend! How can I help you today?"
-        }
-      }
-    ]
-  }
+### Running the Server
+
+**stdio transport** (for local development):
+```bash
+go run ./cmd/stdio
+# Or: make run-stdio
+```
+
+**HTTP transport** (for remote/web deployment):
+```bash
+go run ./cmd/http
+# Or: make run-http
+# Server runs on http://localhost:3000
+```
+
+### Building Binaries
+
+```bash
+make build
+# Creates bin/stdio and bin/http
+```
+
+## 🔧 VS Code Integration
+
+This project includes VS Code configuration for seamless development:
+
+1. Open the project in VS Code
+2. The MCP configuration is in `.vscode/mcp.json`
+3. Build with `Ctrl+Shift+B` (or `Cmd+Shift+B` on Mac)
+4. Test the server using VS Code's MCP tools
+
+### Using DevContainers
+
+1. Install the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+2. Open command palette: "Dev Containers: Reopen in Container"
+3. Everything is pre-configured and ready to use!
+
+## 📁 Project Structure
+
+```
+.
+├── cmd/
+│   ├── stdio/
+│   │   └── main.go        # stdio transport entrypoint
+│   └── http/
+│       └── main.go        # HTTP transport entrypoint
+├── internal/
+│   └── server/
+│       ├── server.go      # Server orchestration
+│       ├── tools.go       # Tool definitions (hello, get_weather, etc.)
+│       ├── resources.go   # Resource and template definitions
+│       └── prompts.go     # Prompt definitions
+├── .vscode/
+│   ├── mcp.json           # MCP server configuration
+│   ├── tasks.json         # Build/run tasks
+│   └── extensions.json
+├── .devcontainer/
+│   └── devcontainer.json
+├── .air.toml              # Live reload configuration
+├── .golangci.yml          # Linter configuration
+├── go.mod
+├── Makefile
+└── README.md
+```
+
+## 🛠️ Development
+
+```bash
+# Development with live reload (recommended)
+make dev
+# Requires air: go install github.com/air-verse/air@latest
+
+# Run without live reload
+make run-stdio
+
+# Run tests
+make test
+
+# Format code
+make fmt
+
+# Lint code
+make lint
+
+# Install all dev tools
+make install-tools
+
+# Clean build artifacts
+make clean
+```
+
+### Live Reload
+
+Install [air](https://github.com/air-verse/air) for automatic rebuilds:
+```bash
+go install github.com/air-verse/air@latest
+make dev
+```
+Changes to any `.go` file will automatically rebuild and restart the server.
+
+## 🔍 MCP Inspector
+
+The [MCP Inspector](https://modelcontextprotocol.io/docs/tools/inspector) is an essential development tool for testing and debugging MCP servers.
+
+### Running Inspector
+
+```bash
+# Build the binary first
+make build
+
+# Run inspector with the stdio binary
+npx @modelcontextprotocol/inspector ./bin/stdio
+
+# Or run directly with go run
+npx @modelcontextprotocol/inspector go run ./cmd/stdio
+```
+
+### What Inspector Provides
+
+- **Tools Tab**: List and invoke all registered tools with parameters
+- **Resources Tab**: Browse and read resources and templates
+- **Prompts Tab**: View and test prompt templates
+- **Logs Tab**: See JSON-RPC messages between client and server
+- **Schema Validation**: Verify tool input/output schemas
+
+### Debugging Tips
+
+1. Start Inspector before connecting your IDE/client
+2. Use the "Logs" tab to see exact request/response payloads
+3. Test tool annotations (ToolAnnotations) are exposed correctly
+4. Verify progress notifications appear for `long_task`
+5. Check that sampling works with `ask_llm`
+
+## 📖 Feature Examples
+
+### Tool with Annotations
+
+```go
+mcp.AddTool(server, &mcp.Tool{
+    Name:        "hello",
+    Title:       "Say Hello",
+    Description: "A friendly greeting tool",
+    Annotations: &mcp.ToolAnnotations{
+        ReadOnlyHint: ptr(true),
+    },
+}, helloHandler)
+
+func helloHandler(ctx context.Context, req *mcp.CallToolRequest, input helloInput) (*mcp.CallToolResult, any, error) {
+    return &mcp.CallToolResult{
+        Content: []mcp.Content{
+            &mcp.TextContent{Text: fmt.Sprintf("Hello, %s!", input.Name)},
+        },
+    }, nil, nil
 }
 ```
+
+### Resource Template
+
+```go
+server.AddResourceTemplate(&mcp.ResourceTemplate{
+    Name:        "Personalized Greeting",
+    URITemplate: "greeting://{name}",
+    MIMEType:    "text/plain",
+}, greetingHandler)
+```
+
+### Tool with Progress Updates
+
+```go
+func longTaskHandler(ctx context.Context, req *mcp.CallToolRequest, input longTaskInput) (*mcp.CallToolResult, any, error) {
+    progressToken := req.Params.GetProgressToken()
+    
+    for i := 0; i < 5; i++ {
+        req.Session.NotifyProgress(ctx, &mcp.ProgressNotificationParams{
+            ProgressToken: progressToken,
+            Progress:      float64(i) / 5.0,
+            Total:         1.0,
+        })
+        time.Sleep(time.Second)
+    }
+    
+    return &mcp.CallToolResult{
+        Content: []mcp.Content{&mcp.TextContent{Text: "Done!"}},
+    }, nil, nil
+}
+```
+
+### Tool with Sampling
+
+```go
+result, err := req.Session.CreateMessage(ctx, &mcp.CreateMessageParams{
+    Messages: []*mcp.SamplingMessage{
+        {Role: "user", Content: &mcp.TextContent{Text: prompt}},
+    },
+    MaxTokens: 100,
+})
+```
+
+## 🔐 Environment Variables
+
+Copy `.env.example` to `.env` and configure:
+
+```bash
+cp .env.example .env
+```
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PORT` | HTTP server port | `3000` |
+
+## 🤝 Contributing
+
+Contributions welcome! Please ensure your changes maintain feature parity with other language starters.
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) for details.
