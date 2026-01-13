@@ -56,7 +56,7 @@ type feedbackInput struct {
 }
 
 // =============================================================================
-// Tool Annotations - Every tool MUST have annotations for AI assistants
+// Tool Annotations - Every tool SHOULD have annotations for AI assistants
 //
 // WHY ANNOTATIONS MATTER:
 // Annotations enable MCP client applications to understand the risk level of
