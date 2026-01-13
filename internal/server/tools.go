@@ -58,6 +58,15 @@ type feedbackInput struct {
 // =============================================================================
 // Tool Annotations - Every tool MUST have annotations for AI assistants
 //
+// WHY ANNOTATIONS MATTER:
+// Annotations enable MCP client applications to understand the risk level of
+// tool calls. Clients can use these hints to implement safety policies, such as:
+//   - Prompting users for confirmation before executing destructive operations
+//   - Auto-approving read-only tools while requiring approval for writes
+//   - Warning users when tools access external systems (openWorldHint)
+//   - Optimizing retry logic for idempotent operations
+//
+// ANNOTATION FIELDS:
 // - ReadOnlyHint: Tool only reads data, doesn't modify state (bool)
 // - DestructiveHint: Tool can permanently delete or modify data (*bool)
 // - IdempotentHint: Repeated calls with same args have same effect (bool)
@@ -171,7 +180,19 @@ func registerTools(server *mcp.Server) {
 	}, loadBonusToolHandler)
 
 	// =============================================================================
-	// Elicitation Tools - Demonstrate requesting user input during tool execution
+	// Elicitation Tools - Request user input during tool execution
+	//
+	// WHY ELICITATION MATTERS:
+	// Elicitation allows tools to request additional information from users
+	// mid-execution, enabling interactive workflows. This is essential for:
+	//   - Confirming destructive actions before they happen
+	//   - Gathering missing parameters that weren't provided upfront
+	//   - Implementing approval workflows for sensitive operations
+	//   - Collecting feedback or additional context during execution
+	//
+	// TWO ELICITATION MODES:
+	// - Form (schema): Display a structured form with typed fields in the client
+	// - URL: Open a web page (e.g., OAuth flow, feedback form, documentation)
 	// =============================================================================
 
 	mcp.AddTool(server, &mcp.Tool{
@@ -365,10 +386,18 @@ func calculatorHandler(_ context.Context, _ *mcp.CallToolRequest, input calculat
 
 // =============================================================================
 // Elicitation Handlers
+//
+// Elicitation requests return one of three actions:
+//   - "accept": User provided the requested information
+//   - "decline": User explicitly refused to provide information
+//   - "cancel": User dismissed the request without responding
+//
+// Always handle all three cases gracefully.
 // =============================================================================
 
 func confirmActionHandler(ctx context.Context, req *mcp.CallToolRequest, input confirmActionInput) (*mcp.CallToolResult, any, error) {
-	// Request user confirmation via elicitation
+	// Form elicitation: Display a structured form with typed fields
+	// The client renders this as a dialog/form based on the JSON schema
 	result, err := req.Session.Elicit(ctx, &mcp.ElicitParams{
 		Message: fmt.Sprintf("Please confirm: %s", input.Action),
 		RequestedSchema: map[string]any{
@@ -437,7 +466,8 @@ func confirmActionHandler(ctx context.Context, req *mcp.CallToolRequest, input c
 }
 
 func getFeedbackHandler(ctx context.Context, req *mcp.CallToolRequest, input feedbackInput) (*mcp.CallToolResult, any, error) {
-	// Build the feedback URL
+	// URL elicitation: Open a web page in the user's browser
+	// Useful for OAuth flows, external forms, documentation links, etc.
 	feedbackURL := "https://github.com/SamMorrowDrums/mcp-starters/issues/new?template=workshop-feedback.yml"
 	if input.Topic != "" {
 		feedbackURL += "&title=" + input.Topic
