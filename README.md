@@ -150,14 +150,7 @@ The [MCP Inspector](https://modelcontextprotocol.io/docs/tools/inspector) is an 
 ### Running Inspector
 
 ```bash
-# Build the binary first
-make build
-
-# Run inspector with the stdio binary
-npx @modelcontextprotocol/inspector ./bin/stdio
-
-# Or run directly with go run
-npx @modelcontextprotocol/inspector go run ./cmd/stdio
+npx @modelcontextprotocol/inspector -- go run ./cmd/stdio/main.go
 ```
 
 ### What Inspector Provides
