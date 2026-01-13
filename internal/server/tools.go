@@ -25,34 +25,34 @@ var bonusToolLoaded = false
 // Tool input types
 
 type helloInput struct {
-	Name string `json:"name" jsonschema:"description=The name to greet"`
+	Name string `json:"name" jsonschema:"The name to greet"`
 }
 
 type weatherInput struct {
-	Location string `json:"location" jsonschema:"description=City name or coordinates"`
+	Location string `json:"location" jsonschema:"City name or coordinates"`
 }
 
 type askLLMInput struct {
-	Prompt    string `json:"prompt" jsonschema:"description=The question or prompt for the LLM"`
-	MaxTokens int    `json:"maxTokens,omitempty" jsonschema:"description=Maximum tokens in response"`
+	Prompt    string `json:"prompt" jsonschema:"The question or prompt for the LLM"`
+	MaxTokens int    `json:"maxTokens,omitempty" jsonschema:"Maximum tokens in response"`
 }
 
 type longTaskInput struct {
-	TaskName string `json:"taskName" jsonschema:"description=Name for this task"`
+	TaskName string `json:"taskName" jsonschema:"Name for this task"`
 }
 
 type calculatorInput struct {
-	A         float64 `json:"a" jsonschema:"description=First number"`
-	B         float64 `json:"b" jsonschema:"description=Second number"`
+	A         float64 `json:"a" jsonschema:"First number"`
+	B         float64 `json:"b" jsonschema:"Second number"`
 	Operation string  `json:"operation" jsonschema:"enum=add,enum=subtract,enum=multiply,enum=divide"`
 }
 
 type confirmActionInput struct {
-	Action string `json:"action" jsonschema:"description=The action to confirm with the user"`
+	Action string `json:"action" jsonschema:"The action to confirm with the user"`
 }
 
 type feedbackInput struct {
-	Topic string `json:"topic,omitempty" jsonschema:"description=Optional topic for the feedback"`
+	Topic string `json:"topic,omitempty" jsonschema:"Optional topic for the feedback"`
 }
 
 // =============================================================================
