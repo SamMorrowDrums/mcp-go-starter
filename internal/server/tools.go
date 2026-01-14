@@ -216,7 +216,7 @@ func registerTools(server *mcp.Server) {
 			Title:           "Get Feedback",
 			ReadOnlyHint:    true,
 			DestructiveHint: boolPtr(false),
-			IdempotentHint:  false, // User response varies
+			IdempotentHint:  false,         // User response varies
 			OpenWorldHint:   boolPtr(true), // Opens external URL
 		},
 	}, getFeedbackHandler)
@@ -350,7 +350,7 @@ func loadBonusToolHandler(_ context.Context, _ *mcp.CallToolRequest, _ any) (*mc
 
 	return &mcp.CallToolResult{
 		Content: []mcp.Content{
-			&mcp.TextContent{Text: "Bonus tool 'bonus_calculator' has been loaded! Refresh your tools list to see it."},
+			&mcp.TextContent{Text: "Bonus tool 'bonus_calculator' has been loaded! The tools list has been updated."},
 		},
 	}, nil, nil
 }
