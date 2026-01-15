@@ -15,7 +15,21 @@ jobs:
     uses: SamMorrowDrums/mcp-conformance-action/.github/workflows/conformance.yml@main
     with:
       install_command: "go mod download"
-      build_command: "go build -o bin/mcp-server ./cmd/stdio"
-      start_command: "./bin/mcp-server"
+      build_command: "go build -o bin/stdio ./cmd/stdio && go build -o bin/http ./cmd/http"
       setup_go: true
       go_version_file: "go.mod"
+      configurations: |
+        [
+          {
+            "name": "stdio",
+            "transport": "stdio",
+            "start_command": "./bin/stdio"
+          },
+          {
+            "name": "http",
+            "transport": "http",
+            "start_command": "./bin/http",
+            "server_url": "http://localhost:3000/mcp",
+            "health_endpoint": "/health"
+          }
+        ]
