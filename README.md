@@ -1,5 +1,11 @@
 # MCP Go Starter
 
+[![CI](https://github.com/SamMorrowDrums/mcp-go-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/SamMorrowDrums/mcp-go-starter/actions/workflows/ci.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/SamMorrowDrums/mcp-go-starter)](https://goreportcard.com/report/github.com/SamMorrowDrums/mcp-go-starter)
+[![Go Version](https://img.shields.io/badge/Go-1.22%2B-00ADD8?logo=go&logoColor=white)](https://go.dev/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![MCP](https://img.shields.io/badge/MCP-Model%20Context%20Protocol-purple)](https://modelcontextprotocol.io/)
+
 A feature-complete Model Context Protocol (MCP) server template in Go using the official go-sdk. This starter demonstrates all major MCP features with clean, idiomatic Go code.
 
 ## 📚 Documentation
