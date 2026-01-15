@@ -1,0 +1,21 @@
+name: Conformance Test
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  conformance:
+    uses: SamMorrowDrums/mcp-conformance-action/.github/workflows/conformance.yml@main
+    with:
+      install_command: "go mod download"
+      build_command: "go build -o bin/mcp-server ./cmd/stdio"
+      start_command: "./bin/mcp-server"
+      setup_go: true
+      go_version_file: "go.mod"
