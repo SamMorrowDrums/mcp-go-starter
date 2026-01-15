@@ -2,6 +2,19 @@
 
 This file provides context for AI coding agents working in this repository.
 
+## Quick Reference
+
+| Task | Command |
+|------|---------|
+| Install deps | `go mod download` |
+| Build | `go build ./...` |
+| Test | `go test -v ./...` |
+| Vet | `go vet ./...` |
+| Format | `gofmt -w .` |
+| Format check | `gofmt -l .` (empty = OK) |
+| Run (stdio) | `go run ./cmd/stdio` |
+| Run (HTTP) | `go run ./cmd/http` |
+
 ## Project Overview
 
 **MCP Go Starter** is a feature-complete Model Context Protocol (MCP) server template in Go using the official go-sdk. It demonstrates all major MCP features including tools, resources, resource templates, prompts, sampling, progress updates, and dynamic tool loading.
@@ -10,9 +23,10 @@ This file provides context for AI coding agents working in this repository.
 
 ## Technology Stack
 
-- **Runtime**: Go 1.22+
+- **Runtime**: Go 1.23
 - **MCP SDK**: `github.com/modelcontextprotocol/go-sdk`
 - **HTTP Server**: net/http (stdlib)
+- **Formatter**: gofmt (built-in)
 
 ## Project Structure
 
@@ -43,46 +57,36 @@ This file provides context for AI coding agents working in this repository.
 
 ```bash
 # Download dependencies
-make deps
-# or: go mod download && go mod tidy
+go mod download && go mod tidy
 
 # Build all binaries
-make build
-# or: go build -o bin/stdio ./cmd/stdio && go build -o bin/http ./cmd/http
+go build ./...
 
 # Run server (stdio transport)
-make run-stdio
-# or: go run ./cmd/stdio
+go run ./cmd/stdio
 
 # Run server (HTTP transport)
-make run-http
-# or: go run ./cmd/http
+go run ./cmd/http
 # With custom port: PORT=8080 go run ./cmd/http
 ```
 
 ## Linting & Formatting
 
 ```bash
-# Format code
-make fmt
-# or: gofmt -w -s . && goimports -w .
+# Format code (required before commit)
+gofmt -w .
 
-# Lint code
-make lint
-# or: golangci-lint run ./...
+# Check formatting (CI uses this - empty output = OK)
+gofmt -l .
 
-# Full check (format + lint + test)
-make check
-
-# Install linting tools (if needed)
-make install-tools
+# Vet code for suspicious constructs
+go vet ./...
 ```
 
 ## Testing
 
 ```bash
-make test
-# or: go test -v ./...
+go test -v ./...
 ```
 
 ## Key Files to Modify
@@ -116,14 +120,12 @@ make test
 - Use `mcp.AddTool()` to register tools with typed input structs
 - Use jsonschema struct tags for input validation
 - Follow standard Go project layout (`cmd/`, `internal/`)
-- Run `make fmt` before committing
-- Run `make check` before PRs
+- Run `gofmt -w .` before committing
+- Run `go vet ./...` before PRs
 
 ## Code Quality Tools
 
-- **gofmt**: Standard Go formatter
-- **goimports**: Import organization
-- **golangci-lint**: Comprehensive linter (config in `.golangci.yml`)
+- **gofmt**: Standard Go formatter (built-in)
 
 ## Tool Input Pattern
 
