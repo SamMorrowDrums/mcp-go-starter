@@ -13,23 +13,31 @@ permissions:
 
 jobs:
   conformance:
-    uses: SamMorrowDrums/mcp-conformance-action/.github/workflows/conformance.yml@v1
-    with:
-      install_command: "go mod download"
-      build_command: "go build -o bin/stdio ./cmd/stdio && go build -o bin/http ./cmd/http"
-      setup_go: true
-      go_version_file: "go.mod"
-      configurations: |
-        [
-          {
-            "name": "stdio",
-            "transport": "stdio",
-            "start_command": "./bin/stdio"
-          },
-          {
-            "name": "streamable-http",
-            "transport": "streamable-http",
-            "start_command": "./bin/http",
-            "server_url": "http://localhost:3000/mcp"
-          }
-        ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+
+      - uses: SamMorrowDrums/mcp-conformance-action@v1
+        with:
+          install_command: "go mod download"
+          build_command: "go build -o bin/stdio ./cmd/stdio && go build -o bin/http ./cmd/http"
+          configurations: |
+            [
+              {
+                "name": "stdio",
+                "transport": "stdio",
+                "start_command": "./bin/stdio"
+              },
+              {
+                "name": "streamable-http",
+                "transport": "streamable-http",
+                "start_command": "./bin/http",
+                "server_url": "http://localhost:3000/mcp"
+              }
+            ]
