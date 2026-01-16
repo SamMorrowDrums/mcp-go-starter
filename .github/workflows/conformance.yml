@@ -19,14 +19,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-go@v5
-        with:
-          go-version-file: 'go.mod'
-
       - uses: SamMorrowDrums/mcp-conformance-action@v1
         with:
-          install_command: "go mod download"
-          build_command: "go build -o bin/stdio ./cmd/stdio && go build -o bin/http ./cmd/http"
+          setup_go: true
+          install_command: go mod download
+          build_command: go build -o bin/stdio ./cmd/stdio && go build -o bin/http ./cmd/http
           configurations: |
             [
               {
