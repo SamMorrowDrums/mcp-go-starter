@@ -30,13 +30,6 @@ func registerResources(server *mcp.Server) {
 		URI:         "info://about",
 	}, aboutResourceHandler)
 
-	server.AddResource(&mcp.Resource{
-		Name:        "Example Document",
-		Description: "An example markdown document",
-		MIMEType:    "text/markdown",
-		URI:         "file://example.md",
-	}, exampleFileHandler)
-
 	server.AddResourceTemplate(&mcp.ResourceTemplate{
 		Name:        "Personalized Greeting",
 		Description: "Generate a personalized greeting",
@@ -68,33 +61,6 @@ This is a feature-complete MCP server demonstrating:
 - Sampling, progress updates, and dynamic tool loading
 
 For more information, visit: https://modelcontextprotocol.io`,
-			},
-		},
-	}, nil
-}
-
-func exampleFileHandler(_ context.Context, _ *mcp.ReadResourceRequest) (*mcp.ReadResourceResult, error) {
-	return &mcp.ReadResourceResult{
-		Contents: []*mcp.ResourceContents{
-			{
-				URI:      "file://example.md",
-				MIMEType: "text/markdown",
-				Text: `# Example Document
-
-This is an example markdown document served as an MCP resource.
-
-## Features
-
-- **Bold text** and *italic text*
-- Lists and formatting
-- Code blocks
-
-` + "```go\nhello := \"world\"\n```" + `
-
-## Links
-
-- [MCP Documentation](https://modelcontextprotocol.io)
-- [Go SDK](https://github.com/modelcontextprotocol/go-sdk)`,
 			},
 		},
 	}, nil
