@@ -1,0 +1,16 @@
+{
+  "resourceTemplates": [
+    {
+      "description": "Get data for a specific item by ID",
+      "mimeType": "application/json",
+      "name": "Item Data",
+      "uriTemplate": "data://items/{id}"
+    },
+    {
+      "description": "Generate a personalized greeting",
+      "mimeType": "text/plain",
+      "name": "Personalized Greeting",
+      "uriTemplate": "greeting://{name}"
+    }
+  ]
+}

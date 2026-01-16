@@ -1,0 +1,18 @@
+{
+  "capabilities": {
+    "logging": {},
+    "prompts": {
+      "listChanged": true
+    },
+    "resources": {
+      "listChanged": true
+    },
+    "tools": {
+      "listChanged": true
+    }
+  },
+  "serverInfo": {
+    "name": "mcp-go-starter",
+    "version": "1.0.0"
+  }
+}

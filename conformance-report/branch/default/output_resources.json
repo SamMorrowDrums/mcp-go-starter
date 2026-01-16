@@ -1,0 +1,16 @@
+{
+  "resources": [
+    {
+      "description": "Information about this MCP server",
+      "mimeType": "text/plain",
+      "name": "About",
+      "uri": "info://about"
+    },
+    {
+      "description": "An example markdown document",
+      "mimeType": "text/markdown",
+      "name": "Example Document",
+      "uri": "file://example.md"
+    }
+  ]
+}

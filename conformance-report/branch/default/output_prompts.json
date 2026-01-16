@@ -1,0 +1,41 @@
+{
+  "prompts": [
+    {
+      "arguments": [
+        {
+          "description": "The code to review",
+          "name": "code",
+          "required": true
+        },
+        {
+          "description": "What to focus on (security, performance, readability, all)",
+          "name": "focus"
+        },
+        {
+          "description": "Programming language",
+          "name": "language",
+          "required": true
+        }
+      ],
+      "description": "Request a code review with specific focus areas",
+      "name": "code_review",
+      "title": "Code Review"
+    },
+    {
+      "arguments": [
+        {
+          "description": "Name of the person to greet",
+          "name": "name",
+          "required": true
+        },
+        {
+          "description": "The greeting style (formal, casual, enthusiastic)",
+          "name": "style"
+        }
+      ],
+      "description": "Generate a greeting in a specific style",
+      "name": "greet",
+      "title": "Greeting Prompt"
+    }
+  ]
+}

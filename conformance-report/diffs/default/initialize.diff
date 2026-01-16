@@ -1,0 +1,21 @@
+--- /home/sammorrowdrums/src/github.com/sammorrowdrums/mcp-starter-repos/go/conformance-report/main/default/output_initialize.json	2026-01-16 16:59:23.927052929 +0100
++++ /home/sammorrowdrums/src/github.com/sammorrowdrums/mcp-starter-repos/go/conformance-report/branch/default/output_initialize.json	2026-01-16 16:59:22.736048646 +0100
+@@ -0,0 +1,18 @@
++{
++  "capabilities": {
++    "logging": {},
++    "prompts": {
++      "listChanged": true
++    },
++    "resources": {
++      "listChanged": true
++    },
++    "tools": {
++      "listChanged": true
++    }
++  },
++  "serverInfo": {
++    "name": "mcp-go-starter",
++    "version": "1.0.0"
++  }
++}
