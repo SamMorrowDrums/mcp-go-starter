@@ -11,7 +11,7 @@ func registerPrompts(server *mcp.Server) {
 	server.AddPrompt(&mcp.Prompt{
 		Name:        "greet",
 		Title:       "Greeting Prompt",
-		Description: "Generate a greeting in a specific style",
+		Description: "Generate a personalized greeting message with customizable style",
 		Arguments: []*mcp.PromptArgument{
 			{Name: "name", Description: "Name of the person to greet", Required: true},
 			{Name: "style", Description: "The greeting style (formal, casual, enthusiastic)", Required: false},

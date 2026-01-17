@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
@@ -25,7 +26,8 @@ var bonusToolLoaded = false
 // Tool input types
 
 type helloInput struct {
-	Name string `json:"name" jsonschema:"The name to greet"`
+	Name      string `json:"name" jsonschema:"The name to greet"`
+	Uppercase bool   `json:"uppercase,omitempty" jsonschema:"Convert the greeting to uppercase"`
 }
 
 type weatherInput struct {
@@ -223,9 +225,13 @@ func registerTools(server *mcp.Server) {
 }
 
 func helloHandler(_ context.Context, _ *mcp.CallToolRequest, input helloInput) (*mcp.CallToolResult, any, error) {
+	greeting := fmt.Sprintf("Hello, %s! Welcome to MCP.", input.Name)
+	if input.Uppercase {
+		greeting = strings.ToUpper(greeting)
+	}
 	return &mcp.CallToolResult{
 		Content: []mcp.Content{
-			&mcp.TextContent{Text: fmt.Sprintf("Hello, %s! Welcome to MCP.", input.Name)},
+			&mcp.TextContent{Text: greeting},
 		},
 	}, nil, nil
 }
