@@ -19,11 +19,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: SamMorrowDrums/mcp-conformance-action@v2.1.0
+      - uses: SamMorrowDrums/mcp-conformance-action@v2.3.0
         with:
           setup_go: true
           install_command: go mod download
           build_command: go build -o bin/stdio ./cmd/stdio && go build -o bin/http ./cmd/http
+          http_start_command: ./bin/http
           configurations: |
             [
               {
@@ -34,7 +35,6 @@ jobs:
               {
                 "name": "streamable-http",
                 "transport": "streamable-http",
-                "start_command": "./bin/http",
                 "server_url": "http://localhost:3000/mcp"
               }
             ]
