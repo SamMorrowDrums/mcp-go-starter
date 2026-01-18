@@ -1,0 +1,28 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "mcp-go-starter",
+  "description": "A Go MCP server template demonstrating tools, prompts, and resources",
+  "title": "MCP Go Starter",
+  "repository": {
+    "url": "https://github.com/SamMorrowDrums/mcp-go-starter",
+    "source": "github"
+  },
+  "version": "1.0.0",
+  "packages": [
+    {
+      "registryType": "go",
+      "identifier": "github.com/SamMorrowDrums/mcp-go-starter/cmd/stdio@latest",
+      "transport": {
+        "type": "stdio"
+      },
+      "command": ["go", "run", "github.com/SamMorrowDrums/mcp-go-starter/cmd/stdio@latest"]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "http://localhost:3000/mcp",
+      "description": "Local HTTP server"
+    }
+  ]
+}
