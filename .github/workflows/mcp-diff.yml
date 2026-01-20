@@ -1,0 +1,40 @@
+name: MCP Server Diff
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  mcp-diff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: SamMorrowDrums/mcp-server-diff@v2.3.2
+        with:
+          setup_go: true
+          install_command: go mod download
+          build_command: go build -o bin/stdio ./cmd/stdio && go build -o bin/http ./cmd/http
+          http_start_command: ./bin/http
+          configurations: |
+            [
+              {
+                "name": "stdio",
+                "transport": "stdio",
+                "start_command": "./bin/stdio"
+              },
+              {
+                "name": "streamable-http",
+                "transport": "streamable-http",
+                "server_url": "http://localhost:3000/mcp"
+              }
+            ]
