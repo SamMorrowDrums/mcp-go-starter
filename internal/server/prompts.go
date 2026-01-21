@@ -11,21 +11,34 @@ func registerPrompts(server *mcp.Server) {
 	server.AddPrompt(&mcp.Prompt{
 		Name:        "greet",
 		Title:       "Greeting Prompt",
-		Description: "Generate a greeting in a specific style",
+		Description: "Generate a greeting message",
 		Arguments: []*mcp.PromptArgument{
-			{Name: "name", Description: "Name of the person to greet", Required: true},
-			{Name: "style", Description: "The greeting style (formal, casual, enthusiastic)", Required: false},
+			{
+				Name:        "name",
+				Title:       "Name",
+				Description: "Name of the person to greet",
+				Required:    true,
+			},
+			{
+				Name:        "style",
+				Title:       "Style",
+				Description: "Greeting style (formal/casual)",
+				Required:    false,
+			},
 		},
 	}, greetPromptHandler)
 
 	server.AddPrompt(&mcp.Prompt{
 		Name:        "code_review",
 		Title:       "Code Review",
-		Description: "Request a code review with specific focus areas",
+		Description: "Review code for potential improvements",
 		Arguments: []*mcp.PromptArgument{
-			{Name: "code", Description: "The code to review", Required: true},
-			{Name: "language", Description: "Programming language", Required: true},
-			{Name: "focus", Description: "What to focus on (security, performance, readability, all)", Required: false},
+			{
+				Name:        "code",
+				Title:       "Code",
+				Description: "The code to review",
+				Required:    true,
+			},
 		},
 	}, codeReviewPromptHandler)
 }
@@ -60,25 +73,8 @@ func greetPromptHandler(_ context.Context, req *mcp.GetPromptRequest) (*mcp.GetP
 
 func codeReviewPromptHandler(_ context.Context, req *mcp.GetPromptRequest) (*mcp.GetPromptResult, error) {
 	code := req.Params.Arguments["code"]
-	language := req.Params.Arguments["language"]
-	focus := req.Params.Arguments["focus"]
-	if focus == "" {
-		focus = "all"
-	}
 
-	focusInstructions := map[string]string{
-		"security":    "Focus on security vulnerabilities and potential exploits.",
-		"performance": "Focus on performance optimizations and efficiency issues.",
-		"readability": "Focus on code clarity, naming, and maintainability.",
-		"all":         "Provide a comprehensive review covering security, performance, and readability.",
-	}
-
-	instruction, ok := focusInstructions[focus]
-	if !ok {
-		instruction = focusInstructions["all"]
-	}
-
-	text := fmt.Sprintf("Please review the following %s code. %s\n\n```%s\n%s\n```", language, instruction, language, code)
+	text := fmt.Sprintf("Please review the following code:\n\n```\n%s\n```", code)
 
 	return &mcp.GetPromptResult{
 		Messages: []*mcp.PromptMessage{

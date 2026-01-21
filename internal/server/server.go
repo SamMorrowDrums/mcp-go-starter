@@ -39,14 +39,14 @@ A demonstration MCP server showcasing Go SDK capabilities.
 
 ## Available Resources
 
-- **info://about**: Server information
-- **file://example.md**: Sample markdown document
+- **about://server**: Server information
+- **doc://example**: Sample document
 - **greeting://{name}**: Personalized greeting template
-- **data://items/{id}**: Item data by ID
+- **item://{id}**: Item data by ID
 
 ## Available Prompts
 
-- **greeting**: Generates a personalized greeting
+- **greet**: Generates a personalized greeting
 - **code_review**: Structured code review prompt
 
 ## Recommended Workflows
