@@ -12,7 +12,7 @@ import (
 
 // Weather represents weather data returned by the get_weather tool.
 type Weather struct {
-	Location    string `json:"location"`
+	Location    string `json:"location"` // Display name can be more descriptive than input
 	Temperature int    `json:"temperature"`
 	Unit        string `json:"unit"`
 	Conditions  string `json:"conditions"`
