@@ -27,28 +27,28 @@ func registerResources(server *mcp.Server) {
 		Name:        "About",
 		Description: "Information about this MCP server",
 		MIMEType:    "text/plain",
-		URI:         "info://about",
+		URI:         "about://server",
 	}, aboutResourceHandler)
 
 	server.AddResource(&mcp.Resource{
 		Name:        "Example Document",
-		Description: "An example markdown document",
-		MIMEType:    "text/markdown",
-		URI:         "file://example.md",
+		Description: "An example document resource",
+		MIMEType:    "text/plain",
+		URI:         "doc://example",
 	}, exampleFileHandler)
 
 	server.AddResourceTemplate(&mcp.ResourceTemplate{
 		Name:        "Personalized Greeting",
-		Description: "Generate a personalized greeting",
+		Description: "A personalized greeting for a specific person",
 		MIMEType:    "text/plain",
 		URITemplate: "greeting://{name}",
 	}, greetingTemplateHandler)
 
 	server.AddResourceTemplate(&mcp.ResourceTemplate{
 		Name:        "Item Data",
-		Description: "Get data for a specific item by ID",
+		Description: "Data for a specific item by ID",
 		MIMEType:    "application/json",
-		URITemplate: "data://items/{id}",
+		URITemplate: "item://{id}",
 	}, itemTemplateHandler)
 }
 
@@ -56,7 +56,7 @@ func aboutResourceHandler(_ context.Context, _ *mcp.ReadResourceRequest) (*mcp.R
 	return &mcp.ReadResourceResult{
 		Contents: []*mcp.ResourceContents{
 			{
-				URI:      "info://about",
+				URI:      "about://server",
 				MIMEType: "text/plain",
 				Text: `MCP Go Starter v1.0.0
 
@@ -77,8 +77,8 @@ func exampleFileHandler(_ context.Context, _ *mcp.ReadResourceRequest) (*mcp.Rea
 	return &mcp.ReadResourceResult{
 		Contents: []*mcp.ResourceContents{
 			{
-				URI:      "file://example.md",
-				MIMEType: "text/markdown",
+				URI:      "doc://example",
+				MIMEType: "text/plain",
 				Text: `# Example Document
 
 This is an example markdown document served as an MCP resource.
@@ -115,7 +115,7 @@ func greetingTemplateHandler(_ context.Context, req *mcp.ReadResourceRequest) (*
 }
 
 func itemTemplateHandler(_ context.Context, req *mcp.ReadResourceRequest) (*mcp.ReadResourceResult, error) {
-	id := extractParam(req.Params.URI, "data://items/")
+	id := extractParam(req.Params.URI, "item://")
 
 	item, ok := itemsData[id]
 	if !ok {

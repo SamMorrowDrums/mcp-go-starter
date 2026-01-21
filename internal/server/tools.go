@@ -25,20 +25,21 @@ var bonusToolLoaded = false
 // Tool input types
 
 type helloInput struct {
-	Name string `json:"name" jsonschema:"The name to greet"`
+	Name string `json:"name" jsonschema:"title=Name,description=Name of the person to greet"`
 }
 
 type weatherInput struct {
-	Location string `json:"location" jsonschema:"City name or coordinates"`
+	City string `json:"city" jsonschema:"title=City,description=City name to get weather for"`
 }
 
 type askLLMInput struct {
-	Prompt    string `json:"prompt" jsonschema:"The question or prompt for the LLM"`
-	MaxTokens int    `json:"maxTokens,omitempty" jsonschema:"Maximum tokens in response"`
+	Prompt    string `json:"prompt" jsonschema:"title=Prompt,description=The question or prompt to send to the LLM"`
+	MaxTokens int    `json:"maxTokens,omitempty" jsonschema:"title=Max Tokens,description=Maximum tokens in response,default=100"`
 }
 
 type longTaskInput struct {
-	TaskName string `json:"taskName" jsonschema:"Name for this task"`
+	TaskName string `json:"taskName" jsonschema:"title=Task Name,description=Name for this task"`
+	Steps    int    `json:"steps,omitempty" jsonschema:"title=Steps,description=Number of steps to simulate,default=5"`
 }
 
 type calculatorInput struct {
@@ -48,11 +49,12 @@ type calculatorInput struct {
 }
 
 type confirmActionInput struct {
-	Action string `json:"action" jsonschema:"The action to confirm with the user"`
+	Action      string `json:"action" jsonschema:"title=Action,description=Description of the action to confirm"`
+	Destructive bool   `json:"destructive,omitempty" jsonschema:"title=Destructive,description=Whether the action is destructive,default=false"`
 }
 
 type feedbackInput struct {
-	Topic string `json:"topic,omitempty" jsonschema:"Optional topic for the feedback"`
+	Question string `json:"question" jsonschema:"title=Question,description=The question to ask the user"`
 }
 
 // =============================================================================
@@ -82,7 +84,7 @@ func registerTools(server *mcp.Server) {
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "hello",
 		Title:       "Say Hello",
-		Description: "A friendly greeting tool that says hello to someone",
+		Description: "Say hello to a person",
 		Annotations: &mcp.ToolAnnotations{
 			Title:           "Say Hello",
 			ReadOnlyHint:    true,
@@ -102,7 +104,7 @@ func registerTools(server *mcp.Server) {
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "get_weather",
 		Title:       "Get Weather",
-		Description: "Get current weather for a location (simulated)",
+		Description: "Get the current weather for a city",
 		Annotations: &mcp.ToolAnnotations{
 			Title:           "Get Weather",
 			ReadOnlyHint:    true,
@@ -142,7 +144,7 @@ func registerTools(server *mcp.Server) {
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "long_task",
 		Title:       "Long Running Task",
-		Description: "A task that takes 5 seconds and reports progress along the way",
+		Description: "Simulate a long-running task with progress updates",
 		Annotations: &mcp.ToolAnnotations{
 			Title:           "Long Running Task",
 			ReadOnlyHint:    true,
@@ -162,7 +164,7 @@ func registerTools(server *mcp.Server) {
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "load_bonus_tool",
 		Title:       "Load Bonus Tool",
-		Description: "Dynamically loads a bonus tool that wasn't available at startup",
+		Description: "Dynamically register a new bonus tool",
 		Annotations: &mcp.ToolAnnotations{
 			Title:           "Load Bonus Tool",
 			ReadOnlyHint:    false, // Modifies server state
@@ -198,7 +200,7 @@ func registerTools(server *mcp.Server) {
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "confirm_action",
 		Title:       "Confirm Action",
-		Description: "Demonstrates elicitation - requests user confirmation before proceeding",
+		Description: "Request user confirmation before proceeding",
 		Annotations: &mcp.ToolAnnotations{
 			Title:           "Confirm Action",
 			ReadOnlyHint:    true,
@@ -211,7 +213,7 @@ func registerTools(server *mcp.Server) {
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "get_feedback",
 		Title:       "Get Feedback",
-		Description: "Demonstrates URL elicitation - opens a feedback form in the browser",
+		Description: "Request feedback from the user",
 		Annotations: &mcp.ToolAnnotations{
 			Title:           "Get Feedback",
 			ReadOnlyHint:    true,
@@ -233,7 +235,7 @@ func helloHandler(_ context.Context, _ *mcp.CallToolRequest, input helloInput) (
 func weatherHandler(_ context.Context, _ *mcp.CallToolRequest, input weatherInput) (*mcp.CallToolResult, any, error) {
 	conditions := []string{"sunny", "cloudy", "rainy", "windy"}
 	weather := Weather{
-		Location:    input.Location,
+		Location:    input.City,
 		Temperature: 15 + rand.Intn(20),
 		Unit:        "celsius",
 		Conditions:  conditions[rand.Intn(len(conditions))],
@@ -285,7 +287,10 @@ func askLLMHandler(ctx context.Context, req *mcp.CallToolRequest, input askLLMIn
 }
 
 func longTaskHandler(ctx context.Context, req *mcp.CallToolRequest, input longTaskInput) (*mcp.CallToolResult, any, error) {
-	steps := 5
+	steps := input.Steps
+	if steps == 0 {
+		steps = 5
+	}
 	progressToken := req.Params.GetProgressToken()
 
 	for i := 0; i < steps; i++ {
@@ -469,8 +474,8 @@ func getFeedbackHandler(ctx context.Context, req *mcp.CallToolRequest, input fee
 	// URL elicitation: Open a web page in the user's browser
 	// Useful for OAuth flows, external forms, documentation links, etc.
 	feedbackURL := "https://github.com/SamMorrowDrums/mcp-starters/issues/new?template=workshop-feedback.yml"
-	if input.Topic != "" {
-		feedbackURL += "&title=" + input.Topic
+	if input.Question != "" {
+		feedbackURL += "&title=" + input.Question
 	}
 
 	// Request user to visit URL via URL elicitation
