@@ -25,21 +25,21 @@ var bonusToolLoaded = false
 // Tool input types
 
 type helloInput struct {
-	Name string `json:"name" jsonschema:"title=Name,description=Name of the person to greet"`
+	Name string `json:"name" jsonschema:"Name of the person to greet"`
 }
 
 type weatherInput struct {
-	City string `json:"city" jsonschema:"title=City,description=City name to get weather for"`
+	City string `json:"city" jsonschema:"City name to get weather for"`
 }
 
 type askLLMInput struct {
-	Prompt    string `json:"prompt" jsonschema:"title=Prompt,description=The question or prompt to send to the LLM"`
-	MaxTokens int    `json:"maxTokens,omitempty" jsonschema:"title=Max Tokens,description=Maximum tokens in response,default=100"`
+	Prompt    string `json:"prompt" jsonschema:"The question or prompt to send to the LLM"`
+	MaxTokens int    `json:"maxTokens,omitempty" jsonschema:"Maximum tokens in response"`
 }
 
 type longTaskInput struct {
-	TaskName string `json:"taskName" jsonschema:"title=Task Name,description=Name for this task"`
-	Steps    int    `json:"steps,omitempty" jsonschema:"title=Steps,description=Number of steps to simulate,default=5"`
+	TaskName string `json:"taskName" jsonschema:"Name for this task"`
+	Steps    int    `json:"steps,omitempty" jsonschema:"Number of steps to simulate"`
 }
 
 type calculatorInput struct {
@@ -49,12 +49,12 @@ type calculatorInput struct {
 }
 
 type confirmActionInput struct {
-	Action      string `json:"action" jsonschema:"title=Action,description=Description of the action to confirm"`
-	Destructive bool   `json:"destructive,omitempty" jsonschema:"title=Destructive,description=Whether the action is destructive,default=false"`
+	Action      string `json:"action" jsonschema:"Description of the action to confirm"`
+	Destructive bool   `json:"destructive,omitempty" jsonschema:"Whether the action is destructive"`
 }
 
 type feedbackInput struct {
-	Question string `json:"question" jsonschema:"title=Question,description=The question to ask the user"`
+	Question string `json:"question" jsonschema:"The question to ask the user"`
 }
 
 // =============================================================================
@@ -85,6 +85,17 @@ func registerTools(server *mcp.Server) {
 		Name:        "hello",
 		Title:       "Say Hello",
 		Description: "Say hello to a person",
+		InputSchema: map[string]interface{}{
+			"type": "object",
+			"properties": map[string]interface{}{
+				"name": map[string]interface{}{
+					"type":        "string",
+					"title":       "Name",
+					"description": "Name of the person to greet",
+				},
+			},
+			"required": []string{"name"},
+		},
 		Annotations: &mcp.ToolAnnotations{
 			Title:           "Say Hello",
 			ReadOnlyHint:    true,
@@ -105,6 +116,17 @@ func registerTools(server *mcp.Server) {
 		Name:        "get_weather",
 		Title:       "Get Weather",
 		Description: "Get the current weather for a city",
+		InputSchema: map[string]interface{}{
+			"type": "object",
+			"properties": map[string]interface{}{
+				"city": map[string]interface{}{
+					"type":        "string",
+					"title":       "City",
+					"description": "City name to get weather for",
+				},
+			},
+			"required": []string{"city"},
+		},
 		Annotations: &mcp.ToolAnnotations{
 			Title:           "Get Weather",
 			ReadOnlyHint:    true,
@@ -125,6 +147,23 @@ func registerTools(server *mcp.Server) {
 		Name:        "ask_llm",
 		Title:       "Ask LLM",
 		Description: "Ask the connected LLM a question using sampling",
+		InputSchema: map[string]interface{}{
+			"type": "object",
+			"properties": map[string]interface{}{
+				"prompt": map[string]interface{}{
+					"type":        "string",
+					"title":       "Prompt",
+					"description": "The question or prompt to send to the LLM",
+				},
+				"maxTokens": map[string]interface{}{
+					"type":        "integer",
+					"title":       "Max Tokens",
+					"description": "Maximum tokens in response",
+					"default":     100,
+				},
+			},
+			"required": []string{"prompt"},
+		},
 		Annotations: &mcp.ToolAnnotations{
 			Title:           "Ask LLM",
 			ReadOnlyHint:    true,
@@ -145,6 +184,23 @@ func registerTools(server *mcp.Server) {
 		Name:        "long_task",
 		Title:       "Long Running Task",
 		Description: "Simulate a long-running task with progress updates",
+		InputSchema: map[string]interface{}{
+			"type": "object",
+			"properties": map[string]interface{}{
+				"taskName": map[string]interface{}{
+					"type":        "string",
+					"title":       "Task Name",
+					"description": "Name for this task",
+				},
+				"steps": map[string]interface{}{
+					"type":        "integer",
+					"title":       "Steps",
+					"description": "Number of steps to simulate",
+					"default":     5,
+				},
+			},
+			"required": []string{"taskName"},
+		},
 		Annotations: &mcp.ToolAnnotations{
 			Title:           "Long Running Task",
 			ReadOnlyHint:    true,
@@ -165,6 +221,11 @@ func registerTools(server *mcp.Server) {
 		Name:        "load_bonus_tool",
 		Title:       "Load Bonus Tool",
 		Description: "Dynamically register a new bonus tool",
+		InputSchema: map[string]interface{}{
+			"type":       "object",
+			"properties": map[string]interface{}{},
+			"required":   []string{},
+		},
 		Annotations: &mcp.ToolAnnotations{
 			Title:           "Load Bonus Tool",
 			ReadOnlyHint:    false, // Modifies server state
@@ -201,6 +262,23 @@ func registerTools(server *mcp.Server) {
 		Name:        "confirm_action",
 		Title:       "Confirm Action",
 		Description: "Request user confirmation before proceeding",
+		InputSchema: map[string]interface{}{
+			"type": "object",
+			"properties": map[string]interface{}{
+				"action": map[string]interface{}{
+					"type":        "string",
+					"title":       "Action",
+					"description": "Description of the action to confirm",
+				},
+				"destructive": map[string]interface{}{
+					"type":        "boolean",
+					"title":       "Destructive",
+					"description": "Whether the action is destructive",
+					"default":     false,
+				},
+			},
+			"required": []string{"action"},
+		},
 		Annotations: &mcp.ToolAnnotations{
 			Title:           "Confirm Action",
 			ReadOnlyHint:    true,
@@ -214,6 +292,17 @@ func registerTools(server *mcp.Server) {
 		Name:        "get_feedback",
 		Title:       "Get Feedback",
 		Description: "Request feedback from the user",
+		InputSchema: map[string]interface{}{
+			"type": "object",
+			"properties": map[string]interface{}{
+				"question": map[string]interface{}{
+					"type":        "string",
+					"title":       "Question",
+					"description": "The question to ask the user",
+				},
+			},
+			"required": []string{"question"},
+		},
 		Annotations: &mcp.ToolAnnotations{
 			Title:           "Get Feedback",
 			ReadOnlyHint:    true,
