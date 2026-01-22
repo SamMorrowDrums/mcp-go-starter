@@ -79,6 +79,12 @@ func NewServer() *mcp.Server {
 			HasResources: true,
 			HasPrompts:   true,
 			Instructions: ServerInstructions,
+			Capabilities: &mcp.ServerCapabilities{
+				Experimental: map[string]any{},
+				Resources: &mcp.ResourceCapabilities{
+					Subscribe: false,
+				},
+			},
 		},
 	)
 

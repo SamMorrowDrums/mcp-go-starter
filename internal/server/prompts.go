@@ -23,7 +23,6 @@ func registerPrompts(server *mcp.Server) {
 				Name:        "style",
 				Title:       "Style",
 				Description: "Greeting style (formal/casual)",
-				Required:    false,
 			},
 		},
 	}, greetPromptHandler)
