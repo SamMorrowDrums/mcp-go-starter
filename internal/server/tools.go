@@ -83,10 +83,10 @@ func boolPtr(b bool) *bool {
 func registerTools(server *mcp.Server) {
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "hello",
-		Title:       "Say Hello",
 		Description: "Say hello to a person",
 		InputSchema: map[string]interface{}{
-			"type": "object",
+			"type":  "object",
+			"title": "HelloInput",
 			"properties": map[string]interface{}{
 				"name": map[string]interface{}{
 					"type":        "string",
@@ -97,7 +97,6 @@ func registerTools(server *mcp.Server) {
 			"required": []string{"name"},
 		},
 		Annotations: &mcp.ToolAnnotations{
-			Title:           "Say Hello",
 			ReadOnlyHint:    true,
 			DestructiveHint: boolPtr(false),
 			IdempotentHint:  true,
@@ -114,10 +113,10 @@ func registerTools(server *mcp.Server) {
 
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "get_weather",
-		Title:       "Get Weather",
 		Description: "Get the current weather for a city",
 		InputSchema: map[string]interface{}{
-			"type": "object",
+			"type":  "object",
+			"title": "WeatherInput",
 			"properties": map[string]interface{}{
 				"city": map[string]interface{}{
 					"type":        "string",
@@ -127,11 +126,36 @@ func registerTools(server *mcp.Server) {
 			},
 			"required": []string{"city"},
 		},
+		OutputSchema: map[string]interface{}{
+			"type":  "object",
+			"title": "Weather",
+			"properties": map[string]interface{}{
+				"location": map[string]interface{}{
+					"type":        "string",
+					"description": "Display name of location",
+				},
+				"temperature": map[string]interface{}{
+					"type":        "integer",
+					"description": "Temperature value",
+				},
+				"unit": map[string]interface{}{
+					"type":        "string",
+					"description": "Temperature unit",
+				},
+				"conditions": map[string]interface{}{
+					"type":        "string",
+					"description": "Weather conditions",
+				},
+				"humidity": map[string]interface{}{
+					"type":        "integer",
+					"description": "Humidity percentage",
+				},
+			},
+			"required": []string{"location", "temperature", "unit", "conditions", "humidity"},
+		},
 		Annotations: &mcp.ToolAnnotations{
-			Title:           "Get Weather",
 			ReadOnlyHint:    true,
 			DestructiveHint: boolPtr(false),
-			IdempotentHint:  false,          // Simulated - results vary
 			OpenWorldHint:   boolPtr(false), // Not real external call
 		},
 		Icons: []mcp.Icon{
@@ -145,10 +169,10 @@ func registerTools(server *mcp.Server) {
 
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "ask_llm",
-		Title:       "Ask LLM",
 		Description: "Ask the connected LLM a question using sampling",
 		InputSchema: map[string]interface{}{
-			"type": "object",
+			"type":  "object",
+			"title": "AskLLMInput",
 			"properties": map[string]interface{}{
 				"prompt": map[string]interface{}{
 					"type":        "string",
@@ -165,10 +189,8 @@ func registerTools(server *mcp.Server) {
 			"required": []string{"prompt"},
 		},
 		Annotations: &mcp.ToolAnnotations{
-			Title:           "Ask LLM",
 			ReadOnlyHint:    true,
 			DestructiveHint: boolPtr(false),
-			IdempotentHint:  false, // LLM responses vary
 			OpenWorldHint:   boolPtr(false),
 		},
 		Icons: []mcp.Icon{
@@ -182,10 +204,10 @@ func registerTools(server *mcp.Server) {
 
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "long_task",
-		Title:       "Long Running Task",
 		Description: "Simulate a long-running task with progress updates",
 		InputSchema: map[string]interface{}{
-			"type": "object",
+			"type":  "object",
+			"title": "LongTaskInput",
 			"properties": map[string]interface{}{
 				"taskName": map[string]interface{}{
 					"type":        "string",
@@ -202,7 +224,6 @@ func registerTools(server *mcp.Server) {
 			"required": []string{"taskName"},
 		},
 		Annotations: &mcp.ToolAnnotations{
-			Title:           "Long Running Task",
 			ReadOnlyHint:    true,
 			DestructiveHint: boolPtr(false),
 			IdempotentHint:  true,
@@ -219,16 +240,13 @@ func registerTools(server *mcp.Server) {
 
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "load_bonus_tool",
-		Title:       "Load Bonus Tool",
 		Description: "Dynamically register a new bonus tool",
 		InputSchema: map[string]interface{}{
 			"type":       "object",
+			"title":      "LoadBonusToolInput",
 			"properties": map[string]interface{}{},
-			"required":   []string{},
 		},
 		Annotations: &mcp.ToolAnnotations{
-			Title:           "Load Bonus Tool",
-			ReadOnlyHint:    false, // Modifies server state
 			DestructiveHint: boolPtr(false),
 			IdempotentHint:  true, // Safe to call multiple times
 			OpenWorldHint:   boolPtr(false),
@@ -260,10 +278,10 @@ func registerTools(server *mcp.Server) {
 
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "confirm_action",
-		Title:       "Confirm Action",
 		Description: "Request user confirmation before proceeding",
 		InputSchema: map[string]interface{}{
-			"type": "object",
+			"type":  "object",
+			"title": "ConfirmActionInput",
 			"properties": map[string]interface{}{
 				"action": map[string]interface{}{
 					"type":        "string",
@@ -280,20 +298,18 @@ func registerTools(server *mcp.Server) {
 			"required": []string{"action"},
 		},
 		Annotations: &mcp.ToolAnnotations{
-			Title:           "Confirm Action",
 			ReadOnlyHint:    true,
 			DestructiveHint: boolPtr(false),
-			IdempotentHint:  false, // User response varies
 			OpenWorldHint:   boolPtr(false),
 		},
 	}, confirmActionHandler)
 
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "get_feedback",
-		Title:       "Get Feedback",
 		Description: "Request feedback from the user",
 		InputSchema: map[string]interface{}{
-			"type": "object",
+			"type":  "object",
+			"title": "FeedbackInput",
 			"properties": map[string]interface{}{
 				"question": map[string]interface{}{
 					"type":        "string",
@@ -304,10 +320,8 @@ func registerTools(server *mcp.Server) {
 			"required": []string{"question"},
 		},
 		Annotations: &mcp.ToolAnnotations{
-			Title:           "Get Feedback",
 			ReadOnlyHint:    true,
 			DestructiveHint: boolPtr(false),
-			IdempotentHint:  false,         // User response varies
 			OpenWorldHint:   boolPtr(true), // Opens external URL
 		},
 	}, getFeedbackHandler)
@@ -422,10 +436,31 @@ func loadBonusToolHandler(_ context.Context, _ *mcp.CallToolRequest, _ any) (*mc
 	if globalServer != nil {
 		mcp.AddTool(globalServer, &mcp.Tool{
 			Name:        "bonus_calculator",
-			Title:       "Bonus Calculator",
 			Description: "A calculator that was dynamically loaded",
+			InputSchema: map[string]interface{}{
+				"type":  "object",
+				"title": "CalculatorInput",
+				"properties": map[string]interface{}{
+					"a": map[string]interface{}{
+						"type":        "number",
+						"title":       "First Number",
+						"description": "First number",
+					},
+					"b": map[string]interface{}{
+						"type":        "number",
+						"title":       "Second Number",
+						"description": "Second number",
+					},
+					"operation": map[string]interface{}{
+						"type":        "string",
+						"title":       "Operation",
+						"description": "Operation to perform",
+						"enum":        []string{"add", "subtract", "multiply", "divide"},
+					},
+				},
+				"required": []string{"a", "b", "operation"},
+			},
 			Annotations: &mcp.ToolAnnotations{
-				Title:           "Bonus Calculator",
 				ReadOnlyHint:    true, // Pure computation
 				DestructiveHint: boolPtr(false),
 				IdempotentHint:  true, // Same inputs = same outputs
