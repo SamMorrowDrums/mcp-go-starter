@@ -1,12 +1,13 @@
 // Package server defines and configures the MCP server with all features.
 //
-// This package creates a feature-complete MCP server demonstrating:
-//   - Tools with annotations, sampling, progress, and dynamic loading
-//   - Resources (static and dynamic)
-//   - Resource Templates
-//   - Prompts with completions
+// ARCHITECTURE OVERVIEW:
+// An MCP server exposes three core primitives to AI clients:
+//   - Tools:     Functions the AI can call (like API endpoints)
+//   - Resources: Read-only data the AI can access (like GET endpoints)
+//   - Prompts:   Reusable prompt templates for common workflows
 //
-// Documentation: https://modelcontextprotocol.io/
+// Each primitive is registered with the server and advertised to clients
+// during capability negotiation. See: https://modelcontextprotocol.io/
 package server
 
 import "github.com/modelcontextprotocol/go-sdk/mcp"
@@ -68,6 +69,9 @@ All tools include annotations indicating:
 Use these hints to make informed decisions about tool usage.`
 
 // NewServer creates and configures the MCP server with all features.
+//
+// CAPABILITIES tell the client what this server supports. During the MCP
+// handshake, the client reads these to know which features are available.
 func NewServer() *mcp.Server {
 	server := mcp.NewServer(
 		&mcp.Implementation{
@@ -79,10 +83,15 @@ func NewServer() *mcp.Server {
 			Capabilities: &mcp.ServerCapabilities{
 				Experimental: map[string]any{},
 				Resources: &mcp.ResourceCapabilities{
+					// ListChanged: false — our resources are static, so we never
+					// need to notify clients that the resource list has changed.
 					ListChanged: false,
 					Subscribe:   false,
 				},
 				Tools: &mcp.ToolCapabilities{
+					// ListChanged: true — because load_bonus_tool adds tools
+					// dynamically at runtime. When a tool is added, the server
+					// sends a tools/list_changed notification so clients refresh.
 					ListChanged: true,
 				},
 			},
