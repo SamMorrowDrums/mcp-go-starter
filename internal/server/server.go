@@ -41,30 +41,30 @@ A demonstration MCP server showcasing Go SDK capabilities.
 ## Available Resources
 
 - **about://server**: Server information
-- **doc://example**: Sample document
+- **doc://example**: Sample markdown document
 - **greeting://{name}**: Personalized greeting template
 - **item://{id}**: Item data by ID
 
 ## Available Prompts
 
-- **greet**: Generates a personalized greeting
+- **greeting**: Generates a personalized greeting
 - **code_review**: Structured code review prompt
 
 ## Recommended Workflows
 
-1. **Testing Connection**: Call hello with your name to verify the server is responding
-2. **Weather Demo**: Call get_weather with a location to see structured output
-3. **Progress Demo**: Call long_task to see progress notifications
-4. **Dynamic Loading**: Call load_bonus_tool, then refresh tools to see bonus_calculator
-5. **Elicitation Demo**: Call confirm_action to see user confirmation flow
-6. **URL Elicitation**: Call get_feedback to open a feedback form
+1. **Testing Connection**: Call ` + "`" + `hello` + "`" + ` with your name to verify the server is responding
+2. **Weather Demo**: Call ` + "`" + `get_weather` + "`" + ` with a location to see structured output
+3. **Progress Demo**: Call ` + "`" + `long_task` + "`" + ` to see progress notifications
+4. **Dynamic Loading**: Call ` + "`" + `load_bonus_tool` + "`" + `, then refresh tools to see ` + "`" + `bonus_calculator` + "`" + `
+5. **Elicitation Demo**: Call ` + "`" + `confirm_action` + "`" + ` to see user confirmation flow
+6. **URL Elicitation**: Call ` + "`" + `get_feedback` + "`" + ` to open a feedback form
 
 ## Tool Annotations
 
 All tools include annotations indicating:
-- Whether they modify state (ReadOnlyHint)
-- If they're safe to retry (IdempotentHint)
-- Whether they access external systems (OpenWorldHint)
+- Whether they modify state (readOnlyHint)
+- If they're safe to retry (idempotentHint)
+- Whether they access external systems (openWorldHint)
 
 Use these hints to make informed decisions about tool usage.`
 
