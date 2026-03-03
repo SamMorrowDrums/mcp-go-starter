@@ -1,3 +1,16 @@
+// resources.go — MCP resource definitions.
+//
+// WHAT ARE MCP RESOURCES?
+// Resources are read-only data sources that AI clients can access. Think of
+// them like GET endpoints — they expose data but never modify state. Clients
+// list available resources and read them by URI.
+//
+// STATIC RESOURCES vs RESOURCE TEMPLATES:
+//   - Static resources have a fixed URI (e.g., "about://server"). The client
+//     sees them directly in the resource list.
+//   - Resource templates use URI templates with parameters (e.g., "item://{id}").
+//     The client fills in the parameters to read dynamic data. This is like
+//     having a parameterized endpoint.
 package server
 
 import (
@@ -23,6 +36,7 @@ var itemsData = map[string]ItemData{
 }
 
 func registerResources(server *mcp.Server) {
+	// Static resources — fixed URIs, always available in the resource list.
 	server.AddResource(&mcp.Resource{
 		Name:        "About",
 		Description: "Information about this MCP server",
@@ -37,6 +51,8 @@ func registerResources(server *mcp.Server) {
 		URI:         "doc://example",
 	}, exampleFileHandler)
 
+	// Resource templates — parameterized URIs for dynamic data.
+	// The {name} and {id} placeholders are filled by the client.
 	server.AddResourceTemplate(&mcp.ResourceTemplate{
 		Name:        "Personalized Greeting",
 		Description: "A personalized greeting for a specific person",

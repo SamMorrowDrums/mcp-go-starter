@@ -1,3 +1,13 @@
+// tools.go — MCP tool definitions and handlers.
+//
+// Each tool demonstrates a different MCP capability:
+//   - hello:          Basic connectivity test (simplest possible tool)
+//   - get_weather:    Structured output with OutputSchema
+//   - long_task:      Progress reporting via NotifyProgress
+//   - ask_llm:        Sampling — asking the client's LLM a question
+//   - load_bonus_tool: Dynamic tool registration at runtime
+//   - confirm_action: Schema elicitation — structured user input forms
+//   - get_feedback:   URL elicitation — opening a web page for the user
 package server
 
 import (
@@ -12,17 +22,17 @@ import (
 
 // Weather represents weather data returned by the get_weather tool.
 type Weather struct {
-	Location    string `json:"location"` // Display name can be more descriptive than input
+	Location    string `json:"location"`
 	Temperature int    `json:"temperature"`
 	Unit        string `json:"unit"`
 	Conditions  string `json:"conditions"`
 	Humidity    int    `json:"humidity"`
 }
 
-// Track if bonus tool is loaded.
+// Track if bonus tool is loaded (used by the dynamic tool loading demo).
 var bonusToolLoaded = false
 
-// Tool input types
+// Tool input types — the Go SDK auto-generates JSON Schema from these structs.
 
 type helloInput struct {
 	Name string `json:"name" jsonschema:"Name of the person to greet"`
@@ -81,6 +91,7 @@ func boolPtr(b bool) *bool {
 }
 
 func registerTools(server *mcp.Server) {
+	// hello — The simplest tool. Use it to verify client↔server connectivity.
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "hello",
 		Description: "Say hello to a person",
@@ -111,6 +122,9 @@ func registerTools(server *mcp.Server) {
 		},
 	}, helloHandler)
 
+	// get_weather — Demonstrates structured output with an OutputSchema.
+	// When OutputSchema is set, the second return value from the handler is
+	// validated against it, giving clients type-safe structured data.
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "get_weather",
 		Description: "Get the current weather for a city",
@@ -167,6 +181,9 @@ func registerTools(server *mcp.Server) {
 		},
 	}, weatherHandler)
 
+	// ask_llm — Demonstrates MCP sampling: the server asks the *client's* LLM
+	// a question. This inverts the usual flow — instead of the AI calling a tool,
+	// the tool calls the AI. Useful for sub-queries and chain-of-thought.
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "ask_llm",
 		Description: "Ask the connected LLM a question using sampling",
@@ -202,6 +219,8 @@ func registerTools(server *mcp.Server) {
 		},
 	}, askLLMHandler)
 
+	// long_task — Demonstrates progress reporting. Sends incremental progress
+	// notifications so clients can display a progress bar or status updates.
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "long_task",
 		Description: "Simulate a long-running task with progress updates",
@@ -238,6 +257,9 @@ func registerTools(server *mcp.Server) {
 		},
 	}, longTaskHandler)
 
+	// load_bonus_tool — Demonstrates dynamic tool registration. Calling this
+	// adds "bonus_calculator" at runtime and notifies clients via tools/list_changed
+	// (enabled by ListChanged: true in server capabilities).
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "load_bonus_tool",
 		Description: "Dynamically register a new bonus tool",
@@ -276,6 +298,8 @@ func registerTools(server *mcp.Server) {
 	// - URL: Open a web page (e.g., OAuth flow, feedback form, documentation)
 	// =============================================================================
 
+	// confirm_action — Schema elicitation: displays a structured form to the user.
+	// The client renders a dialog with typed fields based on the JSON schema.
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "confirm_action",
 		Description: "Request user confirmation before proceeding",
@@ -304,6 +328,8 @@ func registerTools(server *mcp.Server) {
 		},
 	}, confirmActionHandler)
 
+	// get_feedback — URL elicitation: opens a web page in the user's browser.
+	// Useful for OAuth flows, external forms, or documentation links.
 	mcp.AddTool(server, &mcp.Tool{
 		Name:        "get_feedback",
 		Description: "Request feedback from the user",
@@ -353,6 +379,8 @@ func weatherHandler(_ context.Context, _ *mcp.CallToolRequest, input weatherInpu
 	}, weather, nil
 }
 
+// askLLMHandler uses MCP sampling: req.Session.CreateMessage sends a prompt
+// to the client's LLM and returns its response.
 func askLLMHandler(ctx context.Context, req *mcp.CallToolRequest, input askLLMInput) (*mcp.CallToolResult, any, error) {
 	maxTokens := input.MaxTokens
 	if maxTokens == 0 {
@@ -389,6 +417,9 @@ func askLLMHandler(ctx context.Context, req *mcp.CallToolRequest, input askLLMIn
 	}, nil, nil
 }
 
+// longTaskHandler sends progress notifications via req.Session.NotifyProgress.
+// The progressToken comes from the client's original request — if nil, the
+// client didn't request progress updates, so we skip notifications.
 func longTaskHandler(ctx context.Context, req *mcp.CallToolRequest, input longTaskInput) (*mcp.CallToolResult, any, error) {
 	steps := input.Steps
 	if steps == 0 {

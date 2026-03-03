@@ -1,3 +1,15 @@
+// prompts.go — MCP prompt definitions.
+//
+// WHAT ARE MCP PROMPTS?
+// Prompts are reusable prompt templates that clients can discover and invoke.
+// They accept arguments and return pre-built messages for the LLM. Think of
+// them as "saved prompts" that standardize how users interact with the AI
+// for common tasks (greeting someone, reviewing code, etc.).
+//
+// HOW ARGUMENTS WORK:
+// Each prompt declares typed arguments (required or optional). The client
+// collects these from the user and passes them when requesting the prompt.
+// The handler interpolates arguments into the message template.
 package server
 
 import (
