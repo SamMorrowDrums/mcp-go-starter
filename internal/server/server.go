@@ -79,7 +79,7 @@ func NewServer() *mcp.Server {
 			Capabilities: &mcp.ServerCapabilities{
 				Experimental: map[string]any{},
 				Resources: &mcp.ResourceCapabilities{
-					ListChanged: true,
+					ListChanged: false,
 					Subscribe:   false,
 				},
 				Tools: &mcp.ToolCapabilities{
