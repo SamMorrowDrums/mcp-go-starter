@@ -16,57 +16,22 @@ import "github.com/modelcontextprotocol/go-sdk/mcp"
 var globalServer *mcp.Server
 
 // ServerInstructions provides guidance for AI assistants on how to use this server.
-const ServerInstructions = `# MCP Go Starter Server
-
-A demonstration MCP server showcasing Go SDK capabilities.
-
-## Available Tools
-
-### Greeting & Demos
-- **hello**: Simple greeting - use to test connectivity
-- **get_weather**: Returns simulated weather data
-- **long_task**: Demonstrates progress reporting (takes ~5 seconds)
-
-### LLM Interaction
-- **ask_llm**: Invoke LLM sampling to ask questions (requires client support)
-
-### Dynamic Features
-- **load_bonus_tool**: Dynamically adds a calculator tool at runtime
-- **bonus_calculator**: Available after calling load_bonus_tool
-
-### Elicitation (User Input)
-- **confirm_action**: Demonstrates schema elicitation - requests user confirmation
-- **get_feedback**: Demonstrates URL elicitation - opens feedback form in browser
-
-## Available Resources
-
-- **about://server**: Server information
-- **doc://example**: Sample document
-- **greeting://{name}**: Personalized greeting template
-- **item://{id}**: Item data by ID
-
-## Available Prompts
-
-- **greet**: Generates a personalized greeting
-- **code_review**: Structured code review prompt
-
-## Recommended Workflows
-
-1. **Testing Connection**: Call hello with your name to verify the server is responding
-2. **Weather Demo**: Call get_weather with a location to see structured output
-3. **Progress Demo**: Call long_task to see progress notifications
-4. **Dynamic Loading**: Call load_bonus_tool, then refresh tools to see bonus_calculator
-5. **Elicitation Demo**: Call confirm_action to see user confirmation flow
-6. **URL Elicitation**: Call get_feedback to open a feedback form
-
-## Tool Annotations
-
-All tools include annotations indicating:
-- Whether they modify state (ReadOnlyHint)
-- If they're safe to retry (IdempotentHint)
-- Whether they access external systems (OpenWorldHint)
-
-Use these hints to make informed decisions about tool usage.`
+const ServerInstructions = "# MCP Go Starter Server\n\n" +
+	"A demonstration MCP server showcasing Go SDK capabilities.\n\n" +
+	"## Recommended Workflows\n\n" +
+	"1. **Test connectivity** → Call `hello` to verify the server responds\n" +
+	"2. **Structured output** → Call `get_weather` to see typed response data\n" +
+	"3. **Progress reporting** → Call `long_task` to observe real-time progress notifications\n" +
+	"4. **Dynamic tools** → Call `load_bonus_tool`, then re-list tools to see `bonus_calculator` appear\n" +
+	"5. **LLM sampling** → Call `ask_llm` to have the server request a completion from the client\n" +
+	"6. **Elicitation** → Call `confirm_action` (form-based) or `get_feedback` (URL-based) to request user input\n\n" +
+	"## Multi-Tool Flows\n\n" +
+	"- **Full demo**: `hello` → `get_weather` → `long_task` → `load_bonus_tool` → `bonus_calculator`\n" +
+	"- **Dynamic loading**: `load_bonus_tool` triggers a `tools/list_changed` notification — refresh your tool list to see `bonus_calculator`\n" +
+	"- **User interaction**: `confirm_action` demonstrates schema elicitation, `get_feedback` demonstrates URL elicitation\n\n" +
+	"## Notes\n\n" +
+	"- All tools include annotations (readOnlyHint, idempotentHint, openWorldHint) to guide safe usage\n" +
+	"- Resources and prompts are available for context and templating — use `resources/list` and `prompts/list` to discover them"
 
 // NewServer creates and configures the MCP server with all features.
 //
