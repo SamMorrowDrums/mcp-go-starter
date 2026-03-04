@@ -35,6 +35,13 @@
       "group": "test"
     },
     {
+      "label": "Watch (live reload)",
+      "type": "shell",
+      "command": "air",
+      "group": "build",
+      "isBackground": true
+    },
+    {
       "label": "Test",
       "type": "shell",
       "command": "go test ./...",

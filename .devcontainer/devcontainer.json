@@ -1,8 +1,8 @@
 {
   "name": "MCP Go Starter",
-  "image": "mcr.microsoft.com/devcontainers/go:1-1.22",
+  "image": "mcr.microsoft.com/devcontainers/go:1-1.24",
   "features": {},
-  "postCreateCommand": "go mod download && go install github.com/air-verse/air@latest",
+  "postCreateCommand": "go mod download && go install github.com/air-verse/air@v1.61.7",
   "customizations": {
     "vscode": {
       "extensions": [
