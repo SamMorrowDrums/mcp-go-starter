@@ -16,7 +16,7 @@ run-stdio:
 run-http:
 	go run ./cmd/http
 
-# Development with live reload (requires air: go install github.com/air-verse/air@latest)
+# Development with live reload (requires air: go -C tools install github.com/air-verse/air)
 dev:
 	air
 
@@ -48,6 +48,5 @@ deps:
 
 # Install linter (if needed)
 install-tools:
-	go install golang.org/x/tools/cmd/goimports@latest
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-	go install github.com/air-verse/air@latest
+	go -C tools install tool
+	go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest

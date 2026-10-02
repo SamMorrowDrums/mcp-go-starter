@@ -10,7 +10,9 @@ updates:
 
   # Go modules
   - package-ecosystem: "gomod"
-    directory: "/"
+    directories:
+      - "/"
+      - "/tools"
     schedule:
       interval: "weekly"
     commit-message:

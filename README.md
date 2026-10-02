@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/SamMorrowDrums/mcp-go-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/SamMorrowDrums/mcp-go-starter/actions/workflows/ci.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/SamMorrowDrums/mcp-go-starter)](https://goreportcard.com/report/github.com/SamMorrowDrums/mcp-go-starter)
-[![Go Version](https://img.shields.io/badge/Go-1.22%2B-00ADD8?logo=go&logoColor=white)](https://go.dev/)
+[![Go Version](https://img.shields.io/badge/Go-1.26.8%2B-00ADD8?logo=go&logoColor=white)](https://go.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP](https://img.shields.io/badge/MCP-Model%20Context%20Protocol-purple)](https://modelcontextprotocol.io/)
 
@@ -30,13 +30,22 @@ A feature-complete Model Context Protocol (MCP) server template in Go using the 
 | **Prompts** | `greet` | Greeting in various styles |
 | | `code_review` | Code review with focus areas |
 
+MCP sampling (`ask_llm`) is deprecated as of protocol version 2026-07-28
+([SEP-2577](https://modelcontextprotocol.io/seps/2577-deprecate-roots-sampling-and-logging)).
+This workshop keeps the example during the supported deprecation window; new
+production servers should call LLM provider APIs directly.
+
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- [Go 1.22+](https://go.dev/dl/)
+- [Go 1.26.8+](https://go.dev/dl/)
 - (Optional) [air](https://github.com/air-verse/air) for live reload
 - (Optional) [golangci-lint](https://golangci-lint.run/welcome/install/) for linting
+
+Air and goimports are pinned in `tools/go.mod`, including their transitive
+dependencies, and updated by Dependabot alongside the server modules.
+Install them with `go -C tools install tool`.
 
 ### Installation
 
@@ -63,6 +72,10 @@ go run ./cmd/http
 # Or: make run-http
 # Server runs on http://localhost:3000
 ```
+
+The HTTP endpoint requires JSON requests and rejects cross-origin browser
+requests. Native MCP clients without an `Origin` header and same-origin browser
+clients remain supported.
 
 ### Building Binaries
 

@@ -23,7 +23,7 @@ This file provides context for AI coding agents working in this repository.
 
 ## Technology Stack
 
-- **Runtime**: Go 1.23
+- **Runtime**: Go 1.26.8+
 - **MCP SDK**: `github.com/modelcontextprotocol/go-sdk`
 - **HTTP Server**: net/http (stdlib)
 - **Formatter**: gofmt (built-in)
