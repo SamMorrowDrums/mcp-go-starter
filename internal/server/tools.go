@@ -387,6 +387,7 @@ func askLLMHandler(ctx context.Context, req *mcp.CallToolRequest, input askLLMIn
 		maxTokens = 100
 	}
 
+	//nolint:staticcheck // Intentionally demonstrate sampling during its supported deprecation window (SEP-2577).
 	result, err := req.Session.CreateMessage(ctx, &mcp.CreateMessageParams{
 		Messages: []*mcp.SamplingMessage{
 			{

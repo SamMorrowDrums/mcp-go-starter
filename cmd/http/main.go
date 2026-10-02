@@ -48,18 +48,6 @@ func run() error {
 		port = "3000"
 	}
 
-	// Create HTTP handler for MCP
-	handler := mcp.NewStreamableHTTPHandler(func(_ *http.Request) *mcp.Server {
-		srv := server.NewServer()
-		server.SetGlobalServer(srv)
-		return srv
-	}, nil)
-
-	// Set up routes
-	mux := http.NewServeMux()
-	mux.Handle("/mcp", handler)
-	mux.HandleFunc("/health", healthHandler)
-
 	addr := fmt.Sprintf(":%s", port)
 
 	// Start server
@@ -70,7 +58,7 @@ func run() error {
 
 	httpServer := &http.Server{
 		Addr:    addr,
-		Handler: mux,
+		Handler: newHandler(),
 	}
 
 	// Graceful shutdown
@@ -84,6 +72,19 @@ func run() error {
 		return err
 	}
 	return nil
+}
+
+func newHandler() http.Handler {
+	handler := mcp.NewStreamableHTTPHandler(func(_ *http.Request) *mcp.Server {
+		srv := server.NewServer()
+		server.SetGlobalServer(srv)
+		return srv
+	}, nil)
+
+	mux := http.NewServeMux()
+	mux.Handle("/mcp", http.NewCrossOriginProtection().Handler(handler))
+	mux.HandleFunc("/health", healthHandler)
+	return mux
 }
 
 func healthHandler(w http.ResponseWriter, _ *http.Request) {
