@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/SamMorrowDrums/mcp-go-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/SamMorrowDrums/mcp-go-starter/actions/workflows/ci.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/SamMorrowDrums/mcp-go-starter)](https://goreportcard.com/report/github.com/SamMorrowDrums/mcp-go-starter)
-[![Go Version](https://img.shields.io/badge/Go-1.26.8%2B-00ADD8?logo=go&logoColor=white)](https://go.dev/)
+[![Go Version](https://img.shields.io/badge/Go-1.27.4%2B-00ADD8?logo=go&logoColor=white)](https://go.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![MCP](https://img.shields.io/badge/MCP-Model%20Context%20Protocol-purple)](https://modelcontextprotocol.io/)
 
@@ -39,7 +39,7 @@ production servers should call LLM provider APIs directly.
 
 ### Prerequisites
 
-- [Go 1.26.8+](https://go.dev/dl/)
+- [Go 1.27.4+](https://go.dev/dl/)
 - (Optional) [air](https://github.com/air-verse/air) for live reload
 - (Optional) [golangci-lint](https://golangci-lint.run/welcome/install/) for linting
 
